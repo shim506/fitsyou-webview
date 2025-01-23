@@ -75,7 +75,7 @@
     function execDaumPostcode() {
         new daum.Postcode({
             oncomplete: function (data) {
-                const geocoder = new daum.maps.services.Geocoder();
+
                 var jibunAddress = "";
 
                 if (data.jibunAddress == "") {
@@ -83,20 +83,22 @@
                 } else if (data.autoJibunAddress == "") {
                     jibunAddress = data.jibunAddress;
                 }
+                // const geocoder = new daum.maps.services.Geocoder();
+                // geocoder.addressSearch(data.jibunAddress, function (result, status) {
+                //     if (status === kakao.maps.services.Status.OK) {
+                //
+                //     }
+                // })
 
-                geocoder.addressSearch(data.jibunAddress, function (result, status) {
-                    if (status === kakao.maps.services.Status.OK) {
-                        var postData = {
-                            roadAddress: data.roadAddress,
-                            jibunAddress: jibunAddress,
-                            zonecode: data.zonecode,
-                            xPosition: result[0].x,
-                            yPosition: result[0].y
-                        };
-                        console.log(JSON.stringify(postData))
-                        sendMessageToNative(postData)
-                    }
-                })
+                var postData = {
+                    roadAddress: data.roadAddress,
+                    jibunAddress: jibunAddress,
+                    zonecode: data.zonecode,
+                    xPosition: result[0].x,
+                    yPosition: result[0].y
+                };
+                console.log(JSON.stringify(postData))
+                sendMessageToNative(postData)
             },
             width: "100%",
             height: "100%",
