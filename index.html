@@ -33,8 +33,41 @@
         console.log("onReceivedActivityMessageViaJavascriptInterface " + event);
     }
 
-    function postMessageToiOS(postData) {
-        window.webkit.messageHandlers.callBackHandler.postMessage(postData);
+    function sendMessageToNative(postData) {
+        const platform = getPlatform();
+
+        switch (platform) {
+            case "ios":
+                if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.postMessage) {
+                    window.webkit.messageHandlers.postMessage.postMessage(JSON.stringify(postData));
+                } else {
+                    console.error("iOS postMessage 인터페이스가 정의되지 않았습니다.");
+                }
+                break;
+
+            case "android":
+                if (window.Android && typeof window.Android.postMessage === "function") {
+                    window.Android.postMessage(JSON.stringify(postData));
+                } else {
+                    console.error("Android postMessage 인터페이스가 정의되지 않았습니다.");
+                }
+                break;
+
+            default:
+                console.warn("네이티브 환경이 아닙니다. 데이터를 웹 브라우저로 로깅합니다.");
+                console.log("Post Data:", postData);
+        }
+    }
+    function getPlatform() {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+        if (/android/i.test(userAgent)) {
+            return "android";
+        }
+        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+            return "ios";
+        }
+        return "web";
     }
 
     var element_layer = document.getElementById("layer");
@@ -61,7 +94,7 @@
                             yPosition: result[0].y
                         };
                         console.log(JSON.stringify(postData))
-                        window.postMessageToiOS(postData);
+                        sendMessageToNative(postData)
                     }
                 })
             },
