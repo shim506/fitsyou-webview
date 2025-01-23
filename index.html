@@ -38,11 +38,7 @@
 
         switch (platform) {
             case "ios":
-                if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.postMessage) {
-                    window.webkit.messageHandlers.postMessage.postMessage(JSON.stringify(postData));
-                } else {
-                    console.error("iOS postMessage 인터페이스가 정의되지 않았습니다.");
-                }
+                window.webkit.messageHandlers.callBackHandler.postMessage.postMessage(postData);
                 break;
 
             case "android":
@@ -58,6 +54,7 @@
                 console.log("Post Data:", postData);
         }
     }
+
     function getPlatform() {
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
