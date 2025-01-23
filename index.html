@@ -60,11 +60,9 @@
 
         if (/android/i.test(userAgent)) {
             return "android";
+        } else {
+            return "ios"
         }
-        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-            return "ios";
-        }
-        return "web";
     }
 
     var element_layer = document.getElementById("layer");
