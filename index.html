@@ -69,7 +69,6 @@
     function execDaumPostcode() {
         new daum.Postcode({
             oncomplete: function (data) {
-
                 var jibunAddress = "";
 
                 if (data.jibunAddress == "") {
@@ -88,10 +87,8 @@
                     roadAddress: data.roadAddress,
                     jibunAddress: jibunAddress,
                     zonecode: data.zonecode,
-                    // xPosition: result[0].x,
-                    // yPosition: result[0].y
                 };
-                console.log(JSON.stringify(postData))
+
                 sendMessageToNative(postData)
             },
             width: "100%",
