@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
     <title>주소 찾기</title>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <meta
             name="viewport"
             content="width=device-width,height=device-height,initial-scale=1.0"
@@ -38,9 +38,11 @@
     }
 
     var element_layer = document.getElementById("layer");
+
     function execDaumPostcode() {
         new daum.Postcode({
             oncomplete: function (data) {
+                const geocoder = new daum.maps.services.Geocoder();
                 var jibunAddress = "";
 
                 if (data.jibunAddress == "") {
@@ -49,12 +51,19 @@
                     jibunAddress = data.jibunAddress;
                 }
 
-                var postData = {
-                    roadAddress: data.roadAddress,
-                    jibunAddress: jibunAddress,
-                    zonecode: data.zonecode,
-                };
-                window.postMessageToiOS(postData);
+                geocoder.addressSearch(data.jibunAddress, function (result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        console.log(JSON.stringify(postData))
+                        var postData = {
+                            roadAddress: data.roadAddress,
+                            jibunAddress: jibunAddress,
+                            zonecode: data.zonecode,
+                            xPosition: result[0].x,
+                            yPosition: result[0].y
+                        };
+                        window.postMessageToiOS(postData);
+                    }
+                })
             },
             width: "100%",
             height: "100%",
