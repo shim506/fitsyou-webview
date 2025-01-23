@@ -60,9 +60,8 @@
 
         if (/android/i.test(userAgent)) {
             return "android";
-        } else {
-            return "ios"
         }
+        return "ios"
     }
 
     var element_layer = document.getElementById("layer");
